@@ -1,0 +1,49 @@
+---
+title: "Distributions in R"
+author: "MTH225"
+date: "August 29, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Gaussian or normal distribution (suffix is 'norm')
+
+### Find the following probabilities:
+
+* The probability that a standard normal random variable assumes a value less than 1.5
+* The probability that a normal random variable with mu=100 and sigma=15 assumes a value greater than 120
+* The probability that a normal random variable with mu=500 and sigma=100 assumes a value between 450 and 550.
+
+```{r gaussian, echo=TRUE}
+# R code goes here
+```
+
+## The t distribution (suffix is 't')
+
+### Find the following probabilities:
+
+* The probability that a t random variable with 15 degrees of freedom assumes a value less than 1.5
+* The probability that a t random variable with 20 degrees of freedom assumes a value greater than 2
+* The probability that a t random variable with 22 degrees of freedom assumes a value between -2 and 2.
+
+
+```{r t, echo=TRUE}
+# R code goes here
+```
+
+
+## The chi-square distribution (suffix is 'chisq')
+
+### Find the following probabilities:
+
+* The probability that a chi-square random variable with 15 degrees of freedom assumes a value greater than 20
+* The probability that a chi-square random variable with 20 degrees of freedom assumes a value greater than 28
+* The probability that a chi-square random variable with 22 degrees of freedom assumes a value greater than 25.
+
+
+```{r chisquare, echo=TRUE}
+# R code goes here
+```
