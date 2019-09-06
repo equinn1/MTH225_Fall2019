@@ -1,0 +1,58 @@
+---
+title: "Week2_Ex1"
+author: "Equinn"
+date: "September 5, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Use the rbeta() function to generate a sample of 100 observations from a beta distribution with parameters shape1=1 and shape2=2.
+
+Call the result y.
+
+You can display the documentation for the rbeta() function by entering the command
+
+?rbeta
+
+in the Console window.
+
+```{r step 1}
+#
+```
+
+## Draw a histogram of the sample
+
+Use the hist() function
+
+```{r step 2}
+#
+```
+
+## Show quantiles
+
+Use the qbeta() function with the same parameters to find the 25th and 75th percentiles of a beta distribution with those parameters. 
+
+```{r step 3}
+#
+```
+
+## determine the quantiles for the sample
+
+Use the quantiles() function to display the 25th and 75th percentiles of the sample.  Compare these numbers to the values returned by qbeta()
+
+```{r step 4}
+#
+```
+
+## determine the mean of the sample
+
+Use the mean() function to display the mean of the sample.  Compare this to the theoretical mean of a beta distribution with the given parameters. (see the Wikipedia entry for 'beta distribution')
+
+```{r step 5}
+#
+```
