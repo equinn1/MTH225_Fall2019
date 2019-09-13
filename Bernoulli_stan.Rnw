@@ -1,0 +1,28 @@
+\documentclass{article}
+
+\begin{document}
+
+<<>>=                                      #standard setup for Stan
+library(rstan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+@
+
+<<>>=                                   #generate Bernoulli sample
+N = 3                                   #sample size
+
+y = c(1,0,0)                            #generate the sample
+y
+@
+
+
+<<>>=
+stanfit = stan("Bernoulli.stan")         #call stan to fit the model
+
+print(stanfit)                           #print a summary of the results
+@
+
+<<>>=
+Sys.info()[["user"]]
+@
+\end{document}
