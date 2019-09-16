@@ -1,0 +1,32 @@
+\documentclass{article}
+
+\begin{document}
+
+<<>>=                                      #standard setup for Stan
+library(rstan)
+library(shinystan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+@
+
+<<>>=                                   #
+n     = 45                              #number of Bernoulli trials
+p     = .62                             #probability of success
+
+y = rbinom(1,n,p)                       #generate the observation
+@
+
+<<>>=
+stanfit = stan("beta_binomial.stan")    #call stan to fit the model
+
+print(stanfit)                          #print a summary of the results
+@
+
+<<>>=
+launch_shinystan(stanfit)
+@
+
+<<>>=
+Sys.info()[["user"]]
+@
+\end{document}
