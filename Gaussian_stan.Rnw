@@ -1,0 +1,45 @@
+\documentclass{article}
+
+\begin{document}
+
+<<>>=                                      #standard setup for Stan
+library(rstan)
+library(shinystan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+@
+
+<<>>=                                   #
+N     = 200                             #sample size
+mu    = 40                              #mu
+sigma = 15                              #sigma
+
+y = rnorm(N,mu,sigma)                   #generate the sample
+@
+
+Frequentist estimation
+
+<<>>=
+mean(y)
+
+sd(y)
+
+t.test(y)
+@
+
+Bayesian estimation
+
+<<>>=
+stanfit = stan("Gaussian.stan")         #call stan to fit the model
+
+print(stanfit)                          #print a summary of the results
+@
+
+<<>>=
+launch_shinystan(stanfit)
+@
+
+<<>>=
+Sys.info()[["user"]]
+@
+\end{document}
