@@ -1,0 +1,59 @@
+\documentclass{article}
+
+\begin{document}
+
+<<>>=                                      #standard setup for Stan
+library(rstan)
+library(shinystan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+@
+
+<<>>=                                   #
+N1    = 175                             # sample size for group 1
+N2    = 180                             # sample size for group 2
+N     = N1+N2                           # total observations
+mu    = c(40,49)                        # mu array
+sigma = c(35,25)                        # sigma array
+
+group = c(rep(1,N1),rep(2,N2))
+
+y = rnorm(N,mu[group],sigma[group])
+
+@
+
+Frequentist estimation
+
+<<>>=
+y1 = y[1:N1]
+y2 = y[(N1+1):N]
+mean(y1)
+mean(y2)
+sd(y1)
+sd(y2)
+
+t.test(y1,y=y2)
+@
+
+Bayesian estimation
+
+<<>>=
+stanfit = stan("Gaussian_two_samples.stan")         #call stan to fit the model
+
+print(stanfit)                          #print a summary of the results
+@
+
+<<>>=
+launch_shinystan(stanfit)
+
+pd = extract(stanfit)
+
+diff=pd$mu[,1]-pd$mu[,2]
+quantile(diff,c(.01,.025,.5,.5,.95,.975,.99))
+mean(pd$mu[,2]>pd$mu[,1])
+@
+
+<<>>=
+Sys.info()[["user"]]
+@
+\end{document}
