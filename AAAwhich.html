@@ -1,0 +1,80 @@
+<html><body>
+<h2>MTH225 Linear Models Crib Sheet</h2>
+<br>
+<table border="1">
+<tr align="center">
+<td><b>Model</b></td>
+<td><b>Fitted Values</b></td>
+<td><b>Frequentist Example</b></td>
+<td><b>Bayesian Example</b></td>
+<td><b>Stan model file</b></td>
+<td><b>Description</b></td>
+</tr>
+<tr>
+<td>Mean-only<br><br><img src="eq1.png" width="90" height="25"></td>
+<td><img src="mean_only.png" width="200" height="150"></td>
+<td><a href="r_frequentist.html#1sampt">R code</a></td>
+<td><a href="r_Bayesian.html#1sampt">R code</a></td>
+<td><a href="stan_models.html#1sampt">normal.stan</a></td>
+<td>This is the model that more complicated models reduce to when none of the independent variables are good predictors of the dependent variable.  In effect, it says the best estimate of the mean of the dependent variable is just the mean of the sample.</td>
+</tr>
+<tr>
+<td>Simple regression<br><br><img src="eq2.png" width="160" height="23"></td>
+<td><img src="simplereg.png" width="200" height="150"></td>
+<td><a href="r_frequentist.html#simpreg">R code</a></td>
+<td><a href="r_Bayesian.html#simpreg">R code</a></td>
+<td><a href="stan_models.html#simpreg">Stan model file</a></td>
+<td>Assumes a linear relationship between the dependent and independent variables, with superimposed noise so everything doesn't fall on a straight line.  If there is a strong linear relationship, the unexplained variation in the dependent variable is reduced because the independent variable provides information about it.</td>
+</tr>
+<tr>
+<td>Multiple regression<br><br><img src="eq8.png" width="220" height="23"></td>
+<td><img src="simplereg.png" width="200" height="150"></td>
+<td><a href="r_frequentist.html#multreg">R code</a></td>
+<td><a href="r_Bayesian.html#multreg">R code</a></td>
+<td><a href="stan_models.html#multreg">Stan model file</a></td>
+<td>Assumes a linear relationship between the dependent and independent variables, with superimposed noise so everything doesn't fall on a straight line.  If there is a strong linear relationship, the unexplained variation in the dependent variable is reduced because the independent variables provide information about it.  Some predictors can be binary or "dummy" variables.</td>
+</tr>
+<tr>
+<td>One-way ANOVA 3 levels<br><br><img src="eq3.png" width="240" height="23"></td>
+<td><img src="oneway_three_levels.png" width="200" height="150"></td>
+<td><a href="r_frequentist.html#1way3lvl">R code</a></td>
+<td><a href="r_Bayesian.html#1way3lvl">R code</a></td>
+<td><a href="stan_models.html#1wayanov">Stan model file</a></td>
+<td>The fitted values in a one-way or single-factor ANOVA are just the sample means at each level of the factor.</td>
+</tr>
+<tr>
+<td>Two-way ANOVA no interaction<br><br><img src="eq4.png" width="300" height="23"></td>
+<td><img src="twoway_noint.png" width="200" height="150"></td>
+<td><a href="r_frequentist.html#2waynoint">R code</a></td>
+<td><a href="r_Bayesian.html#2waynoint">R code</a></td>
+<td><a href="stan_models.html#2waynoint">Stan model file</a></td>
+<td>This model has two factors or classification variables.  The distinguishing feature is that the difference between levels of the first factor is the same for all levels of the second factor (and vice versa).</td>
+</tr>
+<tr>
+<td>Two-way ANOVA with interaction<br><br><img src="eq5.png" width="350" height="80"></td>
+<td><img src="twoway_int.png" width="200" height="150"></td>
+<td><a href="r_frequentist.html#2wayint">R code</a></td>
+<td><a href="r_Bayesian.html#2wayint">R code</a></td>
+<td><a href="stan_models.html#2wayint">Stan model file</a></td>
+<td>While the standard parameterization is overly complicated, the fitted values for this model are just the means of each cell (each unique combination of levels for the two factors).  The distinguishing characteristic is that the difference between levels of the first factor changes depending on the level of the second factor (and vice versa).</td>
+</tr>
+<tr>
+<td>Covariance - common slope<br><br><img src="eq6.png" width="200" height="23"></td>
+<td><img src="covariance.png" width="200" height="150"></td>
+<td><a href="r_frequentist.html#ancoveq">R code</a></td>
+<td><a href="r_Bayesian.html#ancoveq">R code</a></td>
+<td><a href="stan_models.html#ancoveq">Stan model file</a></td>
+<td>The independent variables for this model are one factor and one continuous predictor.  The fitted values are a series of parallel regression lines, one for each level of the factor.  The graphic illustrates the fitted values when the factor has two levels.  The lines are parallel because there is only one slope parameter that is common to all levels of the factor.</td>
+</tr>
+<tr>
+<td>Covariance - unequal slopes<br><br><img src="eq7.png" width="320" height="23"></td>
+<td><img src="covariance2.png" width="200" height="150"></td>
+<td><a href="r_frequentist.html#ancovneq">R code</a></td>
+<td><a href="r_Bayesian.html#ancovneq">R code</a></td>
+<td><a href="stan_models.html#2wayint">Stan model file</a></td>
+<td>The independent variables for this model are one factor and one continuous predictor.  The fitted values are a series of regression lines, one for each level of the factor.  The graphic illustrates the fitted values when the factor has two levels. This model allows different slope parameters at each level of the factor, so if this model provides a better fit than the model with a common slope for all levels, the lines will not be parallel.</td>
+</tr>
+
+
+</table>
+</body></html>

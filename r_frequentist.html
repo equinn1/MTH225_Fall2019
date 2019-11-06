@@ -1,0 +1,232 @@
+<html><body>
+<h2>Setup</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="source">
+<pre class="knitr r">hsb2 &lt;- <span class="functioncall">within</span>(<span class="functioncall">read.csv</span>(<span class="string">"https://stats.idre.ucla.edu/stat/data/hsb2.csv"</span>), {
+    race &lt;- <span class="functioncall">as.factor</span>(race)
+    schtyp &lt;- <span class="functioncall">as.factor</span>(schtyp)
+    prog &lt;- <span class="functioncall">as.factor</span>(prog)
+})
+
+<span class="functioncall">attach</span>(hsb2)
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="1sampt"></a>Mean-only linear model</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="source">
+<pre class="knitr r"><span class="functioncall">lm1 <- lm(hsb2$read~rep(1,nrow(hsb2))-1)
+</pre>
+</div>
+<div class="output">
+<pre class="knitr r">
+Call:
+lm(formula = hsb2$read ~ rep(1, nrow(hsb2)) - 1)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-24.23  -8.23  -2.23   7.77  23.77 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+rep(1, nrow(hsb2))   52.230      0.725   72.04   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 10.25 on 199 degrees of freedom
+Multiple R-squared:  0.9631,	Adjusted R-squared:  0.9629 
+F-statistic:  5190 on 1 and 199 DF,  p-value: < 2.2e-16
+
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="simpreg"></a>Simple regression</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="source">
+<pre class="knitr r"><span class="functioncall">lm1 <- lm(read~write,data=hsb2)
+</pre>
+</div>
+<div class="output">
+<pre class="knitr r">
+Call:
+lm(formula = read ~ write, data = hsb2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-19.8565  -5.8976  -0.8565   5.5801  24.2703 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 18.16215    3.30716   5.492 1.21e-07 ***
+write        0.64553    0.06168  10.465  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 8.248 on 198 degrees of freedom
+Multiple R-squared:  0.3561,	Adjusted R-squared:  0.3529 
+F-statistic: 109.5 on 1 and 198 DF,  p-value: < 2.2e-16
+
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="multreg"></a>Multiple regression</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="source">
+<pre class="knitr r"><span class="functioncall">lm1 <- lm(read~write+math,data=hsb2)
+</pre>
+</div>
+<div class="output">
+<pre class="knitr r">
+
+Call:
+lm(formula = read ~ write + math, data = hsb2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-16.9930  -4.5995  -0.1821   4.7637  21.1790 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  7.54160    3.26819   2.308   0.0221 *  
+write        0.32840    0.06958   4.720 4.47e-06 ***
+math         0.51965    0.07040   7.382 4.29e-12 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 7.318 on 197 degrees of freedom
+Multiple R-squared:  0.4956,	Adjusted R-squared:  0.4905 
+F-statistic:  96.8 on 2 and 197 DF,  p-value: < 2.2e-16
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="1way3lvl"></a>One-way ANOVA - 3 levels</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="source">
+<pre class="knitr r"><span class="functioncall">aov1 = aov(read~prog,data=hsb2)
+</pre>
+</div>
+<div class="output">
+<pre class="knitr r">
+             Df Sum Sq Mean Sq F value   Pr(>F)    
+prog          2   3717  1858.4   21.28 4.28e-09 ***
+Residuals   197  17203    87.3                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="2waynoint"></a>Two-way ANOVA no interaction</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="source">
+<pre class="knitr r"><span class="functioncall">aov1 = aov(read~prog+schtyp,data=hsb2)
+</pre>
+</div>
+<div class="output">
+<pre class="knitr r">
+             Df Sum Sq Mean Sq F value   Pr(>F)    
+prog          2   3717  1858.4  21.175 4.72e-09 ***
+schtyp        1      0     0.3   0.004    0.953    
+Residuals   196  17202    87.8                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="2wayint"></a>Two-way ANOVA with interaction</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="source">
+<pre class="knitr r"><span class="functioncall">aov1 = aov(read~prog*schtyp,data=hsb2)
+</pre>
+</div>
+<div class="output">
+<pre class="knitr r">
+             Df Sum Sq Mean Sq F value   Pr(>F)    
+prog          2   3717  1858.4  21.043 5.36e-09 ***
+schtyp        1      0     0.3   0.004    0.953    
+prog:schtyp   2     69    34.6   0.391    0.677    
+Residuals   194  17133    88.3                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="ancoveq"></a>Covariance analysis (ANCOVA) - equal slopes</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="source">
+<pre class="knitr r"><span class="functioncall">lm1 = lm(read~as.factor(schtyp)+write,data=hsb2)
+</pre>
+</div>
+<div class="output">
+<pre class="knitr r">
+
+Call:
+lm(formula = read ~ as.factor(schtyp) + write, data = hsb2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-19.8197  -5.9901  -0.8197   5.6126  24.3158 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)        18.19139    3.31919   5.481 1.29e-07 ***
+as.factor(schtyp)2  0.29133    1.60779   0.181    0.856    
+write               0.64409    0.06234  10.332  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 8.268 on 197 degrees of freedom
+Multiple R-squared:  0.3562,	Adjusted R-squared:  0.3497 
+F-statistic: 54.51 on 2 and 197 DF,  p-value: < 2.2e-16
+
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="ancovneq"></a>Covariance analysis (ANCOVA) - unequal slopes</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="source">
+<pre class="knitr r"><span class="functioncall">lm1 = lm(read~as.factor(schtyp)*write,data=hsb2)
+</pre>
+</div>
+<div class="output">
+<pre class="knitr r">
+
+Call:
+lm(formula = read ~ as.factor(schtyp) * write, data = hsb2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-19.7534  -6.0503  -0.7534   5.6872  24.3184 
+
+Coefficients:
+                         Estimate Std. Error t value Pr(>|t|)    
+(Intercept)               17.6376     3.4815   5.066 9.35e-07 ***
+as.factor(schtyp)2         6.7351    12.1104   0.556    0.579    
+write                      0.6547     0.0655   9.995  < 2e-16 ***
+as.factor(schtyp)2:write  -0.1167     0.2173  -0.537    0.592    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 8.283 on 196 degrees of freedom
+Multiple R-squared:  0.3572,	Adjusted R-squared:  0.3474 
+F-statistic:  36.3 on 3 and 196 DF,  p-value: < 2.2e-16
+</body></html>

@@ -1,0 +1,213 @@
+<html><body>
+<h2>Setup</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="source">
+<pre class="knitr r">hsb2 &lt;- <span class="functioncall">within</span>(<span class="functioncall">read.csv</span>(<span class="string">"https://stats.idre.ucla.edu/stat/data/hsb2.csv"</span>), {
+    race &lt;- <span class="functioncall">as.factor</span>(race)
+    schtyp &lt;- <span class="functioncall">as.factor</span>(schtyp)
+    prog &lt;- <span class="functioncall">as.factor</span>(prog)
+})
+
+<span class="functioncall">attach</span>(hsb2)
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="1sampt"></a>Estimate the mean and standard deviation of a normal population from a sample</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="output">
+<pre class="knitr r">
+//Estimate the parameters of a normal distribution
+data {
+  int N;                    //sample size is N
+  real y[N];                //y consists of N real data values
+}
+parameters {
+  real mu;                  //location parameter
+  real<lower=0> sigma;      //dispersion parameter constrained to be nonegative
+}
+model {
+  mu    ~ normal(0,100);    //normal prior for mu: centered at zero with sd=100 
+  sigma ~ cauchy(0,10);     //uniform prior for sigma 
+
+  y     ~ normal(mu,sigma); //normal likelihood given parameters (mu,sigma)
+}
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="simpreg"></a>Simple regression</h2>
+<div class="chunk">
+<div class="output">
+<pre class="knitr r">
+//Simple regression model
+data {
+  int N;               //sample size
+  vector[N] y;         //y data values
+  vector[N] x;         //x data values
+}
+parameters {
+  real beta[2];           //intercept and slope
+  real<lower=0> sigma;    //standard error
+}
+model {
+  beta ~ normal(0,100);   //normal priors for intercept and slope
+  sigma ~ cauchy(0,10);   //half-cauchy prior for sigma 
+
+  y ~ normal(beta[1]+beta[2]*x,sigma);   //model normal with parameters (mu,sigma) 
+}
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="multreg"></a>Multiple regression</h2>
+<div class="chunk">
+<div class="output">
+<pre class="knitr r">
+//Multiple regression model with two predictors
+data {
+  int N;               //sample size
+  vector[N] y;         //y data values
+  vector[N] x1;        //x1 data values
+  vector[N] x2;        //x2 data values
+}
+parameters {
+  real beta[3];           //intercept and slopes
+  real<lower=0> sigma;    //standard error
+}
+model {
+  beta ~ normal(0,100);   //normal priors for intercept and slope
+  sigma ~ cauchy(0,10);   //half-cauchy prior for sigma 
+
+  y ~ normal(beta[1]+beta[2]*x1+beta[3]*x2,sigma);   //model normal with parameters (mu,sigma) 
+}
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="1wayanov"></a>One-way ANOVA</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="output">
+<pre class="knitr r">
+//single-factor ANOVA 
+data {
+  int N;                        //sample size - all levels
+  int L;                        //number of levels
+  real y[N];                    //y values
+  int lvl[N];                   //level for this observation
+}
+parameters {
+  real beta[L];                //Parameters for each level of the single factor
+  real<lower=0> sigma_e;        //common error standard deviation for all levels
+}
+model {
+  
+  beta ~ normal(0,100);        //normal priors for each alpha level
+  sigma_e ~ cauchy(0,10);       //half-cauchy prior for error standard deviation
+ 
+  
+  for (i in 1:N){                           //loop through y values
+    y[i] ~ normal(beta[lvl[i]],sigma_e);  //y[j] ~ normal(beta[grp],sigma_e)
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="2waynoint"></a>Two-way ANOVA without interaction</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="output">
+<pre class="knitr r">
+//two factor ANOVA with arbitrary number of levels of each factor and no interaction - common error standard deviation
+data {
+  int N;                                    //sample1 size
+  vector[N] y;                              //y values
+  int<lower=1> alpha_levels;                //number of levels for factor 1
+  int<lower=1> beta_levels;                 //number of levels for factor 2
+  int<lower=1,upper=alpha_levels> lvl1[N];  //level of factor 1 for each observation
+  int<lower=1,upper=beta_levels> lvl2[N];   //level of factor 2 (integer 1 or 2)
+}
+parameters {
+  real alpha[alpha_levels];                //One alpha parameter for each level of the first factor
+  real beta[beta_levels];                  //One beta parameter for each level of the second factor
+  real<lower=0> sigma;                     //common error standard deviation
+}
+transformed parameters {
+  vector[N] y_hat;                         //signal part
+  for (i in 1:N) {
+    y_hat[i] = alpha[lvl1[i]]+beta[lvl2[i]];
+  }
+}
+model {
+  alpha ~ normal(0,200);         //normal priors for each alpha level 
+  beta  ~ normal(0,200);         //normal priors for each beta level 
+  sigma ~ cauchy(0,10);         //half-cauchy prior for error standard deviation 
+  y ~ normal(y_hat,sigma);      //y[j] has normal likelihood with mean alpha[j]+beta[k] and std deviation sigma 
+}
+
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="ancoveq"></a>Analysis of covariance (ANCOVA) with equal slopes</h2>
+<div class="chunk">
+<div class="rcode">
+<div class="output">
+<pre class="knitr r">
+//two factor ANOVA with two levels of each factor with interaction - common error standard deviation (cell mean model)
+data {
+  int N;                                //sample1 size
+  real y[N];                            //y values
+  int<lower=1,upper=2> level1[N];       //level of factor 1 (integer 1 or 2)
+  int<lower=1,upper=2> level2[N];       //level of factor 2 (integer 1 or 2)
+}
+parameters {
+  real alpha[4];                //Parameters for each of the four combinations of levels of factors 1 and 2
+  real<lower=0> sigma;        //common error standard deviation
+}
+model {
+  int j;
+  alpha ~ normal(0,20);         //normal priors for each alpha
+  sigma ~ cauchy(0,10);         //half-cauchy prior for error standard deviation 
+  
+  for (i in 1:N){                   //loop through y values
+    j = 2*(level1[i]-1)+level2[i];   //compute the cell number
+    y[i] ~ normal(alpha[j],sigma);  //y[j] has normal likelihood with mean alpha[j] and std deviation sigma
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<h2><a name="ancovneq"></a>Analsis of covariance (ANCOVA) unequal slopes</h2>
+<div class="chunk">
+<div class="output">
+<pre class="knitr r">
+//two factor ANOVA with two levels of each factor with interaction - common error standard deviation (cell mean model)
+data {
+  int N;                                //sample1 size
+  real y[N];                            //y values
+  int<lower=1,upper=2> level1[N];       //level of factor 1 (integer 1 or 2)
+  int<lower=1,upper=2> level2[N];       //level of factor 2 (integer 1 or 2)
+}
+parameters {
+  real alpha[4];                //Parameters for each of the four combinations of levels of factors 1 and 2
+  real<lower=0> sigma;        //common error standard deviation
+}
+model {
+  int j;
+  alpha ~ normal(0,20);         //normal priors for each alpha
+  sigma ~ cauchy(0,10);         //half-cauchy prior for error standard deviation 
+  
+  for (i in 1:N){                   //loop through y values
+    j = 2*(level1[i]-1)+level2[i];   //compute the cell number
+    y[i] ~ normal(alpha[j],sigma);  //y[j] has normal likelihood with mean alpha[j] and std deviation sigma
+  }
+}
+</pre>
+
+</body></html>
